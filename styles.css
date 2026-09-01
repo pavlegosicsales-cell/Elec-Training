@@ -68,7 +68,15 @@ body {
 }
 h1, h2, h3, h4, h5, h6, p, figure, ul, ol { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
+/* Every img carries width and height attributes so the browser can reserve
+   space and avoid layout shift. Those attributes also arrive as a
+   presentational hint for the height property, which would otherwise win
+   wherever the author CSS sizes an image by aspect-ratio alone and beat the
+   ratio. Resetting height to auto here keeps the hint doing its one useful
+   job. Rules that genuinely need a fixed height still set it themselves and
+   are more specific, so they are unaffected. */
 img, video { max-width: 100%; display: block; }
+img { height: auto; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; border: 0; background: none; cursor: pointer; }
 input, textarea, select { font: inherit; }
@@ -706,6 +714,7 @@ h6 { font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
 /* Our Work gallery: landscape job photos in place of the reference vertical videos */
 .videos .vtray img {
   width: 100%;
+  height: auto;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: 20px;
@@ -717,6 +726,10 @@ h6 { font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
   padding: 12px 10px 4px;
   font-size: 0.875rem;
   font-weight: 600;
+  line-height: 1.4;
+  /* Reserve two lines so a caption that wraps does not make its whole grid
+     row taller than the rows around it. */
+  min-height: calc(2 * 1.4em + 16px);
   color: var(--navy);
   text-align: center;
 }
@@ -733,6 +746,7 @@ h6 { font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
 .about-imgs .vtray { flex: 1; }
 .about-imgs img {
   width: 100%;
+  height: auto;
   aspect-ratio: 1.635 / 1;
   object-fit: cover;
   border-radius: 20px;
@@ -1311,6 +1325,13 @@ h6 { font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
   /* The heading, copy, suburb tags and button ride down with the scroll.
      The photo stays put in the flow. */
   .areas__col { position: sticky; top: 110px; align-self: flex-start; }
+  /* The reference build stretched this panel to the full height of the text
+     column beside it. That column is much taller here (eighteen locations),
+     and the centre photograph is landscape, so stretching cropped the
+     building down to a narrow strip. Let the panel hug the photo instead and
+     the whole frame stays visible. */
+  .areas__map { align-self: flex-start; }
+  .areas__map img { height: auto; aspect-ratio: 4 / 3; min-height: 0; }
   .faq-layout { flex-direction: row; gap: 64px; align-items: stretch; }
 }
 
